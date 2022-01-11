@@ -5,4 +5,12 @@ public class Employee extends User{
         super(firstName, lastName, userName, password);
         this.typeOfEmployee = typeOfEmployee;
     }
+
+    public int getTypeOfEmployee() {
+        return typeOfEmployee;
+    }
+
+    public void setTypeOfEmployee(int typeOfEmployee) {
+        this.typeOfEmployee = typeOfEmployee;
+    }
 }

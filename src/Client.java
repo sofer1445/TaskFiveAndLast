@@ -14,4 +14,13 @@ public class Client extends User {
     public void setTypeClient(int typeClient) {
         this.typeClient = typeClient;
     }
+
+    @Override
+    public String toString() {
+        if(typeClient == 1){
+            return super.toString() + "{ vip }";
+        } else {
+            return super.toString();
+        }
+    }
 }

@@ -21,40 +21,45 @@ public class Main {
                 onlineMarket.createUser();
             }
             if (userSelection1 == 2) {
-                User logain = onlineMarket.userLogin();
-                if (logain == null) {
+                int logain = onlineMarket.userLogin();
+                if (logain == 0) {
                     System.out.println("User does not exist or one of the parameters is incorrect");
                 } else {
-                    do {
-                        userSelection2 = internalMenu();
-                        switch (userSelection2){
-                            case 1 :
-                                break;
-                            case 2 :
-                                break;
-                            case 3 :
-                                break;
-                            case 4 :
-                                break;
-                            case 5 :
-                                break;
-                            case 6 :
-                                break;
-                            case 7 :
-                                break;
-                            case 8 :
-                                break;
-
+                        if(logain == 1){
+                            onlineMarket.clientBuy();
                         }
-                    } while (userSelection2 != 8);
+                        if(logain == 2) {
+                            userSelection2 = employeeMenu();
+
+                            switch (userSelection2) {
+                                case 1:
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    break;
+                                case 4:
+                                    break;
+                                case 5:
+                                    break;
+                                case 6:
+                                    break;
+                                case 7:
+                                    break;
+                                case 8:
+                                    break;
+
+                            }
+                        }
                 }
+
             }
 
 
         } while (userSelection1 != 3);
     }
 
-    public static int internalMenu (){
+    public static int employeeMenu (){
         Scanner scanner = new Scanner(System.in);
         int userSelection ;
         System.out.println("""

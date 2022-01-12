@@ -13,4 +13,16 @@ public class Employee extends User{
     public void setTypeOfEmployee(int typeOfEmployee) {
         this.typeOfEmployee = typeOfEmployee;
     }
+    public String toString(){
+       if(typeOfEmployee == 1){
+           return super.toString() + " regular employee ";
+
+       }
+       if(typeOfEmployee == 2){
+           return super.toString() + " manager ";
+       }
+       else {
+           return super.toString() + " member of the management team ";
+       }
+    }
 }

@@ -12,8 +12,10 @@ public class OnlineMarket {
     private Employee[] employees;
     private User[] users; // לא בטוח שצריך צריכה הסבר
 
-    public OnlineMarket(Inventory inventory) {
+    public OnlineMarket(Inventory inventory,ShoppingCart shoppingCart) {
         this.inventory = inventory;
+        this.shoppingCart = shoppingCart;
+
     }
 
     public OnlineMarket() {
@@ -203,6 +205,17 @@ public class OnlineMarket {
 
     }
 
+    private Product[] addProductToArray(Product product , Product[] cart){
+        Product[] newArrayOfProduct = new Product[cart.length + 1];
+        for (int i = 0; i < cart.length; i++) {
+            newArrayOfProduct[i] = cart[i];
+        }
+        Product userToAddProduct = new Product(product.getBarcode(),product.getProductDescription(),product.getPrice(),product.getDiscountPercentage(),product.getNumberOfProduct());
+        newArrayOfProduct[cart.length] = userToAddProduct;
+        cart = newArrayOfProduct;
+        return cart;
+    }
+
     private void addUserToArray(User user) {
         User[] newArray = new User[this.users.length + 1];
         for (int i = 0; i < this.users.length; i++) {
@@ -216,29 +229,64 @@ public class OnlineMarket {
 
     public void listOfProducts(){
 
-        products[0] = new Product("Whiskey" , 120 , 10 , 5);
-        products[1] = new Product("Arak" , 65 , 15 , 20);
-        products[2] = new Product("Vodka" , 110 , 5 , 8);
-        products[3] = new Product("wine" , 140 , 20 , 20);
-        products[4] = new Product("beer" , 18 , 10 , 60);
+        products[0] = new Product(1, "Whiskey" , 120 , 10 , 5 );
+        products[1] = new Product(2, "Arak" , 65 , 15 , 20 );
+        products[2] = new Product(3 , "Vodka" , 110 , 5 , 8);
+        products[3] = new Product(4 , "wine" , 140 , 20 , 20);
+        products[4] = new Product(5, "beer" , 18 , 10 , 60);
 
 
     }
     public void clientBuy() {
+        int typeOfProduct = 0;
+        int items = 0;
+        ShoppingCart shoppingCartOne = new ShoppingCart(inventory,products);
+        Product[] shoppingCartNew = new Product[0];
         Scanner scanner = new Scanner(System.in);
-//        listOfProducts();
-//        Inventory inventory =new Inventory(products);
-//        System.out.println(inventory);
-        for (int i = 0; i < products.length; i++) {
-            System.out.print(i+1 + " ,");
-            System.out.println(products[i]);
+        listOfProducts();
+        while (typeOfProduct != -1){
+            Inventory inventoryAvailable =new Inventory(products);
+            System.out.print(inventoryAvailable);
+            System.out.println("Which product would you like to buy? choose by barcode ");
+             typeOfProduct = scanner.nextInt();
+             System.out.println("Quantity of items requested?");
+             while (items <= 0 && typeOfProduct != -1 ) {
+                 items = scanner.nextInt();
+             }
+            for (int i = 0; i < products.length; i++) {
+                if (products[i].getBarcode() == typeOfProduct){
+                    products[i].setNumberOfProduct(products[i].getNumberOfProduct() - items);
+                    inventoryAvailable.setProducts(products);
+                    shoppingCartOne.setAvailableInventory(inventoryAvailable);
+                    shoppingCartNew = addProductToArray(products[i],shoppingCartNew );
+                    items = 0;
+                if(products[i].getNumberOfProduct() < 0){
+                    products[i].setNumberOfProduct(0);
+                    System.out.println("Unfortunately the product is out of stock");
+                    break;
+                }
+                }
+            }
 
         }
-        System.out.println("Which product would you like to buy?");
-        int typeOfProduct = scanner.nextInt();// להוסיף מקט למוצר
-
-
     }
+    public void listOfClient(){
+        System.out.println("List of all customers in the store");
+        for (int i = 0; i < clients.length; i++) {
+            System.out.println(clients[i]);
+
+        }
+    }
+
+
+
+
+
+//public void printClient (){
+//        for (int i = 0 ; clients.length; i++){
+//            System.out.println(clients[i].getFirstName() + clients[i].getLastName());
+//        }
+
 
 }
 

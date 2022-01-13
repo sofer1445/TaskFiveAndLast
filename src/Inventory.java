@@ -14,11 +14,12 @@ public class Inventory {
     public void setProducts(Product[] products) {
         this.products = products;
     }
+    
 
     @Override
     public String toString() {
-        return "Inventory{" +
-                "products=" + Arrays.toString(products) +
+        return "Inventory{ " +
+                "products : " + "\n" + Arrays.toString(products) +
                 '}';
     }
 }

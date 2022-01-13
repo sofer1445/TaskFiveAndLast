@@ -33,7 +33,7 @@ public class Main {
 
                             switch (userSelection2) {
                                 case 1:
-                                    break;
+                                    onlineMarket.listOfClient();
                                 case 2:
                                     break;
                                 case 3:

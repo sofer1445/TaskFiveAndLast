@@ -3,12 +3,14 @@ public class Product {
     private int price;
     private int discountPercentage;
     private int numberOfProduct;
+    private  int barcode;
 
-    public Product(String productDescription, int price, int discountPercentage , int numberOfProduct) {
+    public Product(int barcode, String productDescription, int price, int discountPercentage , int numberOfProduct) {
         this.productDescription = productDescription;
         this.price = price;
         this.discountPercentage = discountPercentage;
         this.numberOfProduct = numberOfProduct;
+        this.barcode = barcode;
 
     }
 
@@ -43,12 +45,21 @@ public class Product {
     public void setNumberOfProduct(int numberOfProduct) {
         this.numberOfProduct = numberOfProduct;
     }
+    public int getBarcode(){
+        return barcode;
+    }
+
+    public void setBarcode(int barcode) {
+        this.barcode = barcode;
+    }
 
     @Override
     public String toString() {
-        return  productDescription + '\'' +
-                ", price=" + price +
-                ", numberOfProduct=" + numberOfProduct +
-                '}';
+        return barcode +")" + " " + productDescription +
+                ", price = " + price +"₪" +
+                ", Quantity in stock => " + numberOfProduct +
+                "\n" + "\n";
     }
+
+
 }

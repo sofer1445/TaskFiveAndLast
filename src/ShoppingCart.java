@@ -6,4 +6,20 @@ public class ShoppingCart {
         this.availableInventory = availableInventory;
         this.availableProduct = availableProduct;
     }
+
+    public Inventory getAvailableInventory() {
+        return availableInventory;
+    }
+
+    public void setAvailableInventory(Inventory availableInventory) {
+        this.availableInventory = availableInventory;
+    }
+
+    public Product[] getAvailableProduct() {
+        return availableProduct;
+    }
+
+    public void setAvailableProduct(Product[] availableProduct) {
+        this.availableProduct = availableProduct;
+    }
 }

@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class ShoppingCart {
     private Inventory availableInventory;
     private Product[] availableProduct;
@@ -21,5 +23,12 @@ public class ShoppingCart {
 
     public void setAvailableProduct(Product[] availableProduct) {
         this.availableProduct = availableProduct;
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart : " +
+                  Arrays.toString(availableProduct) +
+                '}';
     }
 }

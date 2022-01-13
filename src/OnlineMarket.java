@@ -240,8 +240,8 @@ public class OnlineMarket {
     public void clientBuy() {
         int typeOfProduct = 0;
         int items = 0;
-        ShoppingCart shoppingCartOne = new ShoppingCart(inventory,products);
-        Product[] shoppingCartNew = new Product[0];
+        ShoppingCart mainShoppingCart = new ShoppingCart(inventory,products);
+        Product[] customerCart = new Product[0];
         Scanner scanner = new Scanner(System.in);
         listOfProducts();
         while (typeOfProduct != -1){
@@ -257,8 +257,8 @@ public class OnlineMarket {
                 if (products[i].getBarcode() == typeOfProduct){
                     products[i].setNumberOfProduct(products[i].getNumberOfProduct() - items);
                     inventoryAvailable.setProducts(products);
-                    shoppingCartOne.setAvailableInventory(inventoryAvailable);
-                    shoppingCartNew = addProductToArray(products[i],shoppingCartNew );
+                    mainShoppingCart.setAvailableInventory(inventoryAvailable);
+                    customerCart = addProductToArray(products[i],customerCart );
                     items = 0;
                 if(products[i].getNumberOfProduct() < 0){
                     products[i].setNumberOfProduct(0);
@@ -269,6 +269,14 @@ public class OnlineMarket {
             }
 
         }
+        int totalPrice = 0;
+        for (int i = 0; i < customerCart.length  ; i++) {
+
+            totalPrice = (customerCart[i].getPrice() * customerCart[i].getNumberOfProduct()) + totalPrice; // לא מחשב טוב מוזר
+
+        }
+        mainShoppingCart.setAvailableProduct(customerCart);
+        System.out.println(mainShoppingCart);
     }
     public void listOfClient(){
         System.out.println("List of all customers in the store");

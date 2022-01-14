@@ -35,9 +35,9 @@ public class Main {
                                 case 1:
                                     onlineMarket.listOfClient();
                                 case 2:
-                                    break;
+                                    onlineMarket.listOfClientVip();
                                 case 3:
-                                    break;
+                                    onlineMarket.listOfClientWhoBoughtInTheStore();
                                 case 4:
                                     break;
                                 case 5:

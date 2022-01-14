@@ -173,9 +173,10 @@ public class OnlineMarket {
 
     public void createEmployeeOrClient(User user, int[] typeUser) {
         int typeOfUser;
+        int numberOfPurchases = 0;
         if (typeUser[0] == 1) {
             typeOfUser = typeUser[1];// מה הסוג שלו( VIP או רגיל)
-            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), typeOfUser);
+            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), typeOfUser , numberOfPurchases);
             addClientToArray(client);
         } else {
             typeOfUser = typeUser[1];
@@ -199,7 +200,7 @@ public class OnlineMarket {
         for (int i = 0; i < this.clients.length; i++) {
             newArrayOfClient[i] = this.clients[i];
         }
-        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getTypeClient());
+        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getTypeClient(),client.getNumberOfPurchases());
         newArrayOfClient[this.clients.length] = userToAddClient;
         this.clients = newArrayOfClient;
 
@@ -280,6 +281,8 @@ public class OnlineMarket {
 
         }
         System.out.println("price:"+ totalPrice +"₪");
+        shoppingCart = mainShoppingCart;
+        clients[clients.length -1].setNumberOfPurchases(+1);
     }
     public void listOfClient(){
         System.out.println("List of all customers in the store");
@@ -288,6 +291,28 @@ public class OnlineMarket {
 
         }
     }
+    public void listOfClientVip() {
+        System.out.println("List of all vip client in the store");
+        for (int i = 0; i < clients.length; i++) {
+            if (clients[i].getTypeClient() == 1){
+                System.out.println(clients[i]);
+
+        }
+
+    }
+        if(clients.length == 0){
+            System.out.println("There are no VIP customers in the system");
+        }
+    }
+    public void listOfClientWhoBoughtInTheStore(){
+        for (int i = 0; i < clients.length; i++) {
+            if(clients[i].getNumberOfPurchases() >= 1){
+                System.out.println("Customers who have made one or more purchases:\n" + clients[i]);
+            }
+        }
+
+    }
+
         public int resultOfTotalPrice(Product[] products ){
             int totalPrice = 0;
             for (int i = 0; i < products.length  ; i++) {
@@ -295,13 +320,7 @@ public class OnlineMarket {
             }
             return totalPrice;
         }
-//        public int resultOfTotalProduct(Product[] productsAll) {
-//            int totalProducts = 0;
-//            for (int i = 0; i < products.length; i++) {
-//                totalProducts = productsAll[i].getProductDescription() + productsAll[i].getNumberOfProduct();
-//
-//            }
-//        }
+
 
 
 

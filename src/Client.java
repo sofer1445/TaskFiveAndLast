@@ -1,9 +1,11 @@
 public class Client extends User {
     private int typeClient;
+    private int numberOfPurchases;
 
-    public Client(String firstName, String lastName, String userName, String password , int typeClient) {
+    public Client(String firstName, String lastName, String userName, String password , int typeClient , int numberOfPurchases) {
         super(firstName, lastName, userName, password);
         this.typeClient = typeClient;
+        this.numberOfPurchases = numberOfPurchases;
 
     }
 
@@ -13,6 +15,14 @@ public class Client extends User {
 
     public void setTypeClient(int typeClient) {
         this.typeClient = typeClient;
+    }
+
+    public int getNumberOfPurchases() {
+        return numberOfPurchases;
+    }
+
+    public void setNumberOfPurchases(int numberOfPurchases) {
+        this.numberOfPurchases = numberOfPurchases;
     }
 
     @Override

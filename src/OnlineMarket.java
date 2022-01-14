@@ -271,12 +271,15 @@ public class OnlineMarket {
         }
         int totalPrice = 0;
         for (int i = 0; i < customerCart.length  ; i++) {
-
             totalPrice = (customerCart[i].getPrice() * customerCart[i].getNumberOfProduct()) + totalPrice; // לא מחשב טוב מוזר
+        }
+
+        mainShoppingCart.setAvailableProduct(customerCart);
+        for (int i = 0; i < customerCart.length; i++) {
+            System.out.println(customerCart[i].getProductDescription());
 
         }
-        mainShoppingCart.setAvailableProduct(customerCart);
-        System.out.println(mainShoppingCart);
+        System.out.println("price:"+ totalPrice); // מחשב את המחיר של מוצר אחד לפני
     }
     public void listOfClient(){
         System.out.println("List of all customers in the store");

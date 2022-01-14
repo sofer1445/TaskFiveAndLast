@@ -39,7 +39,7 @@ public class Main {
                                 case 3:
                                     onlineMarket.listOfClientWhoBoughtInTheStore();
                                 case 4:
-                                    break;
+                                    onlineMarket.clientWithBiggerBought();
                                 case 5:
                                     break;
                                 case 6:

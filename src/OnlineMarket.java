@@ -282,7 +282,7 @@ public class OnlineMarket {
         }
         System.out.println("price:"+ totalPrice +"₪");
         shoppingCart = mainShoppingCart;
-        clients[clients.length -1].setNumberOfPurchases(+1);
+        clients[clients.length -1].setNumberOfPurchases(clients[clients.length-1].getNumberOfPurchases() +1);
     }
     public void listOfClient(){
         System.out.println("List of all customers in the store");
@@ -312,13 +312,29 @@ public class OnlineMarket {
         }
 
     }
-
+    public void clientWithBiggerBought(){
+        Client preferredCustomer = clients[0];
+        for (int i = 0; i < clients.length; i++) {
+            if(preferredCustomer.getNumberOfPurchases() < clients[i].getNumberOfPurchases()){
+                preferredCustomer = clients[i];
+            }
+        }
+        System.out.println("The customer with the highest number of purchases is: "+preferredCustomer);
+    } // נבדק רק פעמיים לנסות למצוא באגים...
         public int resultOfTotalPrice(Product[] products ){
             int totalPrice = 0;
             for (int i = 0; i < products.length  ; i++) {
                 totalPrice = ((products[i].getPrice() * products[i].getNumberOfProduct()) + totalPrice);
             }
             return totalPrice;
+        }
+        public void addProduct(){
+        int barcode = products[products.length-1].getBarcode();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter a product name:");
+        String nameOfProduct = scanner.nextLine();
+        System.out.println("Enter product price:");
+        int price = scanner.nextInt(); //להמשיך לקבל שדות של המוצר לפי product
         }
 
 

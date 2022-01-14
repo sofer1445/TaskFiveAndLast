@@ -247,10 +247,11 @@ public class OnlineMarket {
         while (typeOfProduct != -1){
             Inventory inventoryAvailable =new Inventory(products);
             System.out.print(inventoryAvailable);
-            System.out.println("Which product would you like to buy? choose by barcode ");
+            System.out.println(" Which product would you like to buy? choose by barcode \n" +
+                                "If you want to finish the purchase in the store, type -1 ");
              typeOfProduct = scanner.nextInt();
-             System.out.println("Quantity of items requested?");
              while (items <= 0 && typeOfProduct != -1 ) {
+                 System.out.println("Quantity of items requested?");
                  items = scanner.nextInt();
              }
             for (int i = 0; i < products.length; i++) {
@@ -259,7 +260,10 @@ public class OnlineMarket {
                     inventoryAvailable.setProducts(products);
                     mainShoppingCart.setAvailableInventory(inventoryAvailable);
                     customerCart = addProductToArray(products[i],customerCart );
+                    customerCart[customerCart.length-1].setNumberOfProduct(items);
                     items = 0;
+                    System.out.println("Products in the current cart: \n" + customerCart[customerCart.length-1].getProductDescription() +"--"+ customerCart[customerCart.length-1].getNumberOfProduct());
+                    System.out.println("The current cart price is: " +resultOfTotalPrice(customerCart) + "₪");
                 if(products[i].getNumberOfProduct() < 0){
                     products[i].setNumberOfProduct(0);
                     System.out.println("Unfortunately the product is out of stock");
@@ -269,17 +273,13 @@ public class OnlineMarket {
             }
 
         }
-        int totalPrice = 0;
-        for (int i = 0; i < customerCart.length  ; i++) {
-            totalPrice = (customerCart[i].getPrice() * customerCart[i].getNumberOfProduct()) + totalPrice; // לא מחשב טוב מוזר
-        }
-
+        int totalPrice = resultOfTotalPrice(customerCart);
         mainShoppingCart.setAvailableProduct(customerCart);
         for (int i = 0; i < customerCart.length; i++) {
-            System.out.println(customerCart[i].getProductDescription());
+            System.out.println(customerCart[i].getProductDescription() +"--"+ customerCart[i].getNumberOfProduct());
 
         }
-        System.out.println("price:"+ totalPrice); // מחשב את המחיר של מוצר אחד לפני
+        System.out.println("price:"+ totalPrice +"₪");
     }
     public void listOfClient(){
         System.out.println("List of all customers in the store");
@@ -288,15 +288,22 @@ public class OnlineMarket {
 
         }
     }
-
-
-
-
-
-//public void printClient (){
-//        for (int i = 0 ; clients.length; i++){
-//            System.out.println(clients[i].getFirstName() + clients[i].getLastName());
+        public int resultOfTotalPrice(Product[] products ){
+            int totalPrice = 0;
+            for (int i = 0; i < products.length  ; i++) {
+                totalPrice = ((products[i].getPrice() * products[i].getNumberOfProduct()) + totalPrice);
+            }
+            return totalPrice;
+        }
+//        public int resultOfTotalProduct(Product[] productsAll) {
+//            int totalProducts = 0;
+//            for (int i = 0; i < products.length; i++) {
+//                totalProducts = productsAll[i].getProductDescription() + productsAll[i].getNumberOfProduct();
+//
+//            }
 //        }
+
+
 
 
 }

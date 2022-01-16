@@ -10,9 +10,9 @@ public class OnlineMarket {
     private Client[] clients;
     private Inventory inventory;
     private Employee[] employees;
-    private User[] users; // לא בטוח שצריך צריכה הסבר
+    private User[] users; //
 
-    public OnlineMarket(Inventory inventory,ShoppingCart shoppingCart) {
+    public OnlineMarket(Inventory inventory, ShoppingCart shoppingCart) {
         this.inventory = inventory;
         this.shoppingCart = shoppingCart;
 
@@ -23,6 +23,7 @@ public class OnlineMarket {
         this.users = new User[0];
         this.clients = new Client[0];
         this.employees = new Employee[0];
+
 
     }
 
@@ -125,8 +126,9 @@ public class OnlineMarket {
 
     }
 
-    public void createUser() {
+    public User createUser() {
         Scanner scanner = new Scanner(System.in);
+        int items = 0;
         int[] typeOfUser = employeeOrCustomer();
         System.out.println("Please enter your first name:");
         String firstName = scanner.nextLine();
@@ -160,14 +162,14 @@ public class OnlineMarket {
             password = scanner.nextLine();
             goodPassword = passwordCheck(password);
         }
-        User user = new User(firstName, lastName, userName, password);
+        User user = new User(firstName, lastName, userName, password, items);
         addUserToArray(user);
         if (typeOfUser[0] == 1) {
             createEmployeeOrClient(user, typeOfUser);
         } else {
             createEmployeeOrClient(user, typeOfUser);
         }
-
+            return user;
 
     }
 
@@ -175,22 +177,23 @@ public class OnlineMarket {
         int typeOfUser;
         int numberOfPurchases = 0;
         if (typeUser[0] == 1) {
-            typeOfUser = typeUser[1];// מה הסוג שלו( VIP או רגיל)
-            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), typeOfUser , numberOfPurchases);
+            typeOfUser = typeUser[1];
+            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser);
             addClientToArray(client);
         } else {
             typeOfUser = typeUser[1];
-            Employee employee = new Employee(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), typeOfUser);
+            Employee employee = new Employee(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser);
             addEmployeeArray(employee);
         }
 
     }
+
     private void addEmployeeArray(Employee employee) {
         Employee[] newArrayOfEmployee = new Employee[this.employees.length + 1];
         for (int i = 0; i < this.employees.length; i++) {
             newArrayOfEmployee[i] = this.employees[i];
         }
-        Employee userToAddClient = new Employee(employee.getFirstName(), employee.getLastName(), employee.getUserName(), employee.getPassword(), employee.getTypeOfEmployee());
+        Employee userToAddClient = new Employee(employee.getFirstName(), employee.getLastName(), employee.getUserName(), employee.getPassword(), employee.getNumberOfPurchases(), employee.getTypeOfEmployee());
         newArrayOfEmployee[this.employees.length] = userToAddClient;
         this.employees = newArrayOfEmployee;
     }
@@ -200,18 +203,18 @@ public class OnlineMarket {
         for (int i = 0; i < this.clients.length; i++) {
             newArrayOfClient[i] = this.clients[i];
         }
-        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getTypeClient(),client.getNumberOfPurchases());
+        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getNumberOfPurchases(), client.getTypeClient());
         newArrayOfClient[this.clients.length] = userToAddClient;
         this.clients = newArrayOfClient;
 
     }
 
-    private Product[] addProductToArray(Product product , Product[] cart){
+    private Product[] addProductToArray(Product product, Product[] cart) {
         Product[] newArrayOfProduct = new Product[cart.length + 1];
         for (int i = 0; i < cart.length; i++) {
             newArrayOfProduct[i] = cart[i];
         }
-        Product userToAddProduct = new Product(product.getBarcode(),product.getProductDescription(),product.getPrice(),product.getDiscountPercentage(),product.getNumberOfProduct());
+        Product userToAddProduct = new Product(product.getBarcode(), product.getProductDescription(), product.getPrice(), product.getDiscountPercentage(), product.getNumberOfProduct());
         newArrayOfProduct[cart.length] = userToAddProduct;
         cart = newArrayOfProduct;
         return cart;
@@ -222,124 +225,206 @@ public class OnlineMarket {
         for (int i = 0; i < this.users.length; i++) {
             newArray[i] = this.users[i];
         }
-        User userToAdd = new User(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword());
+        User userToAdd = new User(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), user.getNumberOfPurchases());
         newArray[this.users.length] = userToAdd;
         this.users = newArray;
 
     }
 
-    public void listOfProducts(){
-
-        products[0] = new Product(1, "Whiskey" , 120 , 10 , 5 );
-        products[1] = new Product(2, "Arak" , 65 , 15 , 20 );
-        products[2] = new Product(3 , "Vodka" , 110 , 5 , 8);
-        products[3] = new Product(4 , "wine" , 140 , 20 , 20);
-        products[4] = new Product(5, "beer" , 18 , 10 , 60);
+    public void listOfProducts() {
+        if (inventory != null) {
+            return;
+        }
+        products[0] = new Product(1, "Whiskey", 120, 10, 5);
+        products[1] = new Product(2, "Arak", 65, 15, 20);
+        products[2] = new Product(3, "Vodka", 110, 5, 8);
+        products[3] = new Product(4, "wine", 140, 20, 20);
+        products[4] = new Product(5, "beer", 18, 10, 60);
+        inventory = new Inventory(products);
 
 
     }
+
     public void clientBuy() {
         int typeOfProduct = 0;
         int items = 0;
-        ShoppingCart mainShoppingCart = new ShoppingCart(inventory,products);
+        shoppingCart = new ShoppingCart(inventory, products);
         Product[] customerCart = new Product[0];
         Scanner scanner = new Scanner(System.in);
         listOfProducts();
-        while (typeOfProduct != -1){
-            Inventory inventoryAvailable =new Inventory(products);
-            System.out.print(inventoryAvailable);
+        while (typeOfProduct != -1) {
+            inventory = new Inventory(products);
+            System.out.print(inventory);
             System.out.println(" Which product would you like to buy? choose by barcode \n" +
-                                "If you want to finish the purchase in the store, type -1 ");
-             typeOfProduct = scanner.nextInt();
-             while (items <= 0 && typeOfProduct != -1 ) {
-                 System.out.println("Quantity of items requested?");
-                 items = scanner.nextInt();
-             }
+                    "If you want to finish the purchase in the store, type -1 ");
+            typeOfProduct = scanner.nextInt();
+            while (items <= 0 && typeOfProduct != -1) {
+                System.out.println("Quantity of items requested?");
+                items = scanner.nextInt();
+            }
             for (int i = 0; i < products.length; i++) {
-                if (products[i].getBarcode() == typeOfProduct){
+                if (products[i].getBarcode() == typeOfProduct) {
                     products[i].setNumberOfProduct(products[i].getNumberOfProduct() - items);
-                    inventoryAvailable.setProducts(products);
-                    mainShoppingCart.setAvailableInventory(inventoryAvailable);
-                    customerCart = addProductToArray(products[i],customerCart );
-                    customerCart[customerCart.length-1].setNumberOfProduct(items);
+                    inventory.setProducts(products);
+                    shoppingCart.setAvailableInventory(inventory);
+                    customerCart = addProductToArray(products[i], customerCart);
+                    customerCart[customerCart.length - 1].setNumberOfProduct(items);
                     items = 0;
-                    System.out.println("Products in the current cart: \n" + customerCart[customerCart.length-1].getProductDescription() +"--"+ customerCart[customerCart.length-1].getNumberOfProduct());
-                    System.out.println("The current cart price is: " +resultOfTotalPrice(customerCart) + "₪");
-                if(products[i].getNumberOfProduct() < 0){
-                    products[i].setNumberOfProduct(0);
-                    System.out.println("Unfortunately the product is out of stock");
-                    break;
-                }
+                    System.out.println("Products in the current cart: \n" + customerCart[customerCart.length - 1].getProductDescription() + "--" + customerCart[customerCart.length - 1].getNumberOfProduct());
+                    System.out.println("The current cart price is: " + resultOfTotalPrice(customerCart) + "₪");
+                    if (products[i].getNumberOfProduct() < 0) {
+                        products[i].setNumberOfProduct(0);
+                        System.out.println("Unfortunately the product is out of stock");
+                        break;
+                    }
                 }
             }
 
         }
         int totalPrice = resultOfTotalPrice(customerCart);
-        mainShoppingCart.setAvailableProduct(customerCart);
+        shoppingCart.setAvailableProduct(customerCart);
         for (int i = 0; i < customerCart.length; i++) {
-            System.out.println(customerCart[i].getProductDescription() +"--"+ customerCart[i].getNumberOfProduct());
+            System.out.println(customerCart[i].getProductDescription() + "--" + customerCart[i].getNumberOfProduct());
 
         }
-        System.out.println("price:"+ totalPrice +"₪");
-        shoppingCart = mainShoppingCart;
-        clients[clients.length -1].setNumberOfPurchases(clients[clients.length-1].getNumberOfPurchases() +1);
+        System.out.println("price:" + totalPrice + "₪");
+        users[users.length - 1].setNumberOfPurchases(users[users.length - 1].getNumberOfPurchases() + 1);
     }
-    public void listOfClient(){
+
+    public void listOfClient() {
+        if (clients == null) {
+            System.out.println("No customers exist");
+            return;
+        }
         System.out.println("List of all customers in the store");
         for (int i = 0; i < clients.length; i++) {
             System.out.println(clients[i]);
 
         }
     }
+
     public void listOfClientVip() {
+        if (clients == null) {
+            System.out.println("No customers exist");
+            return;
+        }
         System.out.println("List of all vip client in the store");
         for (int i = 0; i < clients.length; i++) {
-            if (clients[i].getTypeClient() == 1){
+            if (clients[i].getTypeClient() == 1) {
                 System.out.println(clients[i]);
 
-        }
+            }
 
-    }
-        if(clients.length == 0){
+        }
+        if (clients.length == 0) {
             System.out.println("There are no VIP customers in the system");
         }
     }
-    public void listOfClientWhoBoughtInTheStore(){
+
+    public void listOfClientWhoBoughtInTheStore() {
+        if (clients == null) {
+            System.out.println("No customers exist");
+            return;
+        }
         for (int i = 0; i < clients.length; i++) {
-            if(clients[i].getNumberOfPurchases() >= 1){
+            if (clients[i].getNumberOfPurchases() >= 1) {
                 System.out.println("Customers who have made one or more purchases:\n" + clients[i]);
             }
         }
 
     }
-    public void clientWithBiggerBought(){
+
+    public void clientWithBiggerBought() {
+        if (clients == null) {
+            System.out.println("No customers exist");
+            return;
+        }
         Client preferredCustomer = clients[0];
         for (int i = 0; i < clients.length; i++) {
-            if(preferredCustomer.getNumberOfPurchases() < clients[i].getNumberOfPurchases()){
+            if (preferredCustomer.getNumberOfPurchases() < clients[i].getNumberOfPurchases()) {
                 preferredCustomer = clients[i];
             }
         }
-        System.out.println("The customer with the highest number of purchases is: "+preferredCustomer);
+        System.out.println("The customer with the highest number of purchases is: " + preferredCustomer);
     } // נבדק רק פעמיים לנסות למצוא באגים...
-        public int resultOfTotalPrice(Product[] products ){
-            int totalPrice = 0;
-            for (int i = 0; i < products.length  ; i++) {
-                totalPrice = ((products[i].getPrice() * products[i].getNumberOfProduct()) + totalPrice);
-            }
-            return totalPrice;
+
+    public int resultOfTotalPrice(Product[] products) {
+        int totalPrice = 0;
+        for (int i = 0; i < products.length; i++) {
+            totalPrice = ((products[i].getPrice() * products[i].getNumberOfProduct()) + totalPrice);
         }
-        public void addProduct(){
-        int barcode = products[products.length-1].getBarcode();
+        return totalPrice;
+    }
+
+    public void addProduct() {
+        listOfProducts();
+        int barcode = products[products.length - 1].getBarcode();
+        barcode++;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter a product name:");
         String nameOfProduct = scanner.nextLine();
         System.out.println("Enter product price:");
-        int price = scanner.nextInt(); //להמשיך לקבל שדות של המוצר לפי product
+        int price = scanner.nextInt();
+        System.out.println("Percentage discount for club member:");
+        int discountForClub = scanner.nextInt();
+        System.out.println("Units in Stock:");
+        int unitesInStock = scanner.nextInt();
+        Product productNew = new Product(barcode, nameOfProduct, price, discountForClub, unitesInStock);
+        products = addProductToArray(productNew, products);
+        inventory = new Inventory(products);
+
+    }
+
+    public void productNotAvailable() {
+        listOfProducts();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please select a product that you would like to remove from stock or put in stock");
+        for (int i = 0; i < products.length; i++) {
+            System.out.println(products[i]);
+
         }
+        int numberProduct = scanner.nextInt();
+        products[numberProduct - 1] = null;
+        inventory = new Inventory(products);
+        System.out.println(products[numberProduct].getProductDescription() + ": This product is out of stock ");
+
+    }
+
+    public void employeeBuy(User user) {
+        double priceForEmployee = 0;
+        double discountPercentage;
+        int typeOfEmployee = 0;
+        System.out.println("Hello dear employee Welcome to the online store");
+        clientBuy();
+        Product[] shoppingCartForEmployee = shoppingCart.getAvailableProduct();
+        priceForEmployee = resultOfTotalPrice(shoppingCartForEmployee);
+        for (int i = 0; i < employees.length; i++) {
+            if(Objects.equals(user.getUserName(), employees[i].getUserName())){ // לא מחפש טוב את העובד
+                typeOfEmployee = employees[i].getTypeOfEmployee();
+                break;
+            }
+
+        }
+        switch (typeOfEmployee) {
+            case 1:
+                discountPercentage = 10;
+                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100)); // לחפש משהו יותר יעיל לאחוזים
+                break;
+            case 2:
+                discountPercentage = 20;
+                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
+                break;
+            case 3:
+                discountPercentage = 30;
+                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
+                break;
+
+        }
+        discountPercentage = 0;
+        System.out.println("Price after discount: " + priceForEmployee + "₪");
 
 
-
-
+    }
 
 }
 

@@ -5,12 +5,8 @@ public class Main {
     public static void main(String[] args) {
         OnlineMarket onlineMarket = new OnlineMarket();
         Scanner scanner = new Scanner(System.in);
-        //System.out.println(java.time.LocalTime.now());
-//        java.util.Date date = new java.util.Date();
-//        System.out.println(date);
         int userSelection1;
         int userSelection2;
-        User user = null;
         do {
             do {
                 System.out.println("""
@@ -21,7 +17,7 @@ public class Main {
                 userSelection1 = scanner.nextInt();
             } while (userSelection1 > 3 || userSelection1 <= 0);
             if (userSelection1 == 1) {
-                 user = onlineMarket.createUser(); // לא פרקטי
+                 onlineMarket.createUser();
             }
             if (userSelection1 == 2) {
                 int logain = onlineMarket.userLogin();
@@ -48,7 +44,7 @@ public class Main {
                                 case 6:
                                     onlineMarket.productNotAvailable();
                                 case 7:
-                                    onlineMarket.employeeBuy(user);
+                                    onlineMarket.employeeBuy();
                                 case 8:
                                     break;
 

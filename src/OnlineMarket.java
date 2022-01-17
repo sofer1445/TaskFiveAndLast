@@ -1,8 +1,8 @@
 import java.sql.Array;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Scanner;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 
 public class OnlineMarket {
     private Product[] products;
@@ -126,7 +126,7 @@ public class OnlineMarket {
 
     }
 
-    public User createUser() {
+    public void createUser() {
         Scanner scanner = new Scanner(System.in);
         int items = 0;
         int[] typeOfUser = employeeOrCustomer();
@@ -162,14 +162,15 @@ public class OnlineMarket {
             password = scanner.nextLine();
             goodPassword = passwordCheck(password);
         }
-        User user = new User(firstName, lastName, userName, password, items);
+        Date date = new Date();
+        User user = new User(firstName, lastName, userName, password, items, date);
         addUserToArray(user);
         if (typeOfUser[0] == 1) {
             createEmployeeOrClient(user, typeOfUser);
         } else {
             createEmployeeOrClient(user, typeOfUser);
         }
-            return user;
+
 
     }
 
@@ -178,11 +179,11 @@ public class OnlineMarket {
         int numberOfPurchases = 0;
         if (typeUser[0] == 1) {
             typeOfUser = typeUser[1];
-            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser);
+            Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser, user.getDate());
             addClientToArray(client);
         } else {
             typeOfUser = typeUser[1];
-            Employee employee = new Employee(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser);
+            Employee employee = new Employee(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser, user.getDate());
             addEmployeeArray(employee);
         }
 
@@ -193,7 +194,7 @@ public class OnlineMarket {
         for (int i = 0; i < this.employees.length; i++) {
             newArrayOfEmployee[i] = this.employees[i];
         }
-        Employee userToAddClient = new Employee(employee.getFirstName(), employee.getLastName(), employee.getUserName(), employee.getPassword(), employee.getNumberOfPurchases(), employee.getTypeOfEmployee());
+        Employee userToAddClient = new Employee(employee.getFirstName(), employee.getLastName(), employee.getUserName(), employee.getPassword(), employee.getNumberOfPurchases(), employee.getTypeOfEmployee(), employee.getDate());
         newArrayOfEmployee[this.employees.length] = userToAddClient;
         this.employees = newArrayOfEmployee;
     }
@@ -203,7 +204,7 @@ public class OnlineMarket {
         for (int i = 0; i < this.clients.length; i++) {
             newArrayOfClient[i] = this.clients[i];
         }
-        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getNumberOfPurchases(), client.getTypeClient());
+        Client userToAddClient = new Client(client.getFirstName(), client.getLastName(), client.getUserName(), client.getPassword(), client.getNumberOfPurchases(), client.getTypeClient(), client.getDate());
         newArrayOfClient[this.clients.length] = userToAddClient;
         this.clients = newArrayOfClient;
 
@@ -225,7 +226,7 @@ public class OnlineMarket {
         for (int i = 0; i < this.users.length; i++) {
             newArray[i] = this.users[i];
         }
-        User userToAdd = new User(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), user.getNumberOfPurchases());
+        User userToAdd = new User(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), user.getNumberOfPurchases(), user.getDate());
         newArray[this.users.length] = userToAdd;
         this.users = newArray;
 
@@ -390,7 +391,7 @@ public class OnlineMarket {
 
     }
 
-    public void employeeBuy(User user) {
+    public void employeeBuy() {
         double priceForEmployee = 0;
         double discountPercentage;
         int typeOfEmployee = 0;
@@ -398,29 +399,30 @@ public class OnlineMarket {
         clientBuy();
         Product[] shoppingCartForEmployee = shoppingCart.getAvailableProduct();
         priceForEmployee = resultOfTotalPrice(shoppingCartForEmployee);
-        for (int i = 0; i < employees.length; i++) {
-            if(Objects.equals(user.getUserName(), employees[i].getUserName())){ // לא מחפש טוב את העובד
-                typeOfEmployee = employees[i].getTypeOfEmployee();
-                break;
-            }
 
+        for (int i = 0; i < employees.length ; i++) {
+            for (int j = 0; j < employees.length; j++) {
+                if (this.employees[i].getDate().after(employees[j].getDate())) {
+                    typeOfEmployee = employees[i].getTypeOfEmployee();
+                    break;
+                }
+
+            }
         }
         switch (typeOfEmployee) {
-            case 1:
+            case 1 -> {
                 discountPercentage = 10;
                 priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100)); // לחפש משהו יותר יעיל לאחוזים
-                break;
-            case 2:
+            }
+            case 2 -> {
                 discountPercentage = 20;
                 priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
-                break;
-            case 3:
+            }
+            case 3 -> {
                 discountPercentage = 30;
                 priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
-                break;
-
+            }
         }
-        discountPercentage = 0;
         System.out.println("Price after discount: " + priceForEmployee + "₪");
 
 

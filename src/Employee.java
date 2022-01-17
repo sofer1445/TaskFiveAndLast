@@ -1,9 +1,12 @@
+import java.text.DateFormat;
+import java.util.Date;
+
 public class Employee extends User{
     private int typeOfEmployee;
 
 
-    public Employee(String firstName, String lastName, String userName, String password ,int numberOfPurchases, int typeOfEmployee) {
-        super(firstName, lastName, userName, password, numberOfPurchases);
+    public Employee(String firstName, String lastName, String userName, String password , int numberOfPurchases, int typeOfEmployee , Date date) {
+        super(firstName, lastName, userName, password, numberOfPurchases, date);
         this.typeOfEmployee = typeOfEmployee;
     }
 

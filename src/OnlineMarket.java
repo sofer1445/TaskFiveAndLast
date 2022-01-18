@@ -1,10 +1,42 @@
-import java.sql.Array;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 public class OnlineMarket {
+    private static final int ARRAY_SIZE = 0;
+    private static final int ARRAY_SIZE_PRODUCT = 5;
+    private static final int CHOICE_RESULT = 2;
+    private static final int LOCATION_ARRAY = 0;
+    private static final int CLIENT = 1;
+    private static final int EMPLOYEE = 2;
+    private static final int LOCATION_ARRAY2 = 1;
+    private static final int LAST_OPTION = 3;
+    private static final int PASSWORD_LENGTH = 6;
+    private static final int ITEMS = 0;
+    private static final int BARCODE = 0;
+    private static final int BARCODE1 = 1;
+    private static final int BARCODE2 = 2;
+    private static final int BARCODE3 = 3;
+    private static final int BARCODE4 = 4;
+    private static final int BARCODE5 = 5;
+    private static final int PRICE_WHISKEY = 120;
+    private static final int ARAK_PRICE = 65;
+    private static final int VODKA_PRICE = 110;
+    private static final int WINE_PRICE = 140;
+    private static final int BEER_PRICE = 18;
+    private static final int DISCOUNT_WISKEY_BEER = 10;
+    private static final int DISCOUNT_ARAK_VODKA = 15;
+    private static final int DISCOUNT_WINE = 20;
+    private static final int AMOUNT_WHISKEY_VODKA_BEER = 10;
+    private static final int AMOUNT_ARAK_WINE = 20;
+    private static final int FINISH_SHOP = -1;
+    private static final int START_TYPE_EMPLOYEE = 0;
+    private static final int REGULAR_EMPLOYEE = 1;
+    private static final int MANAGER_EMPLOYEE = 2;
+    private static final int MEMBER_EMPLOYEE = 3;
+    private static final double REGULAR_EMPLOYEE_DISCOUNT = 0.1;
+    private static final double MANAGER_EMPLOYEE_DISCOUNT = 0.2;
+    private static final double MEMBER_EMPLOYEE_DISCOUNT = 0.3;
+
     private Product[] products;
     private ShoppingCart shoppingCart;
     private Client[] clients;
@@ -19,31 +51,30 @@ public class OnlineMarket {
     }
 
     public OnlineMarket() {
-        this.products = new Product[5];
-        this.users = new User[0];
-        this.clients = new Client[0];
-        this.employees = new Employee[0];
+        this.products = new Product[ARRAY_SIZE_PRODUCT];
+        this.users = new User[ARRAY_SIZE];
+        this.clients = new Client[ARRAY_SIZE];
+        this.employees = new Employee[ARRAY_SIZE];
 
 
     }
 
-
-    public int[] employeeOrCustomer() {
+    private int[] employeeOrCustomer() {
         Scanner scanner = new Scanner(System.in);
-        int[] theChoiceResult = new int[2];
+        int[] theChoiceResult = new int[CHOICE_RESULT];
         do {
             System.out.println("""
                     Please choose Are you an employee or a customer?
                     1 - Customer
                     2 - Employee""");
-            theChoiceResult[0] = scanner.nextInt();
-        } while (theChoiceResult[0] != 2 && theChoiceResult[0] != 1); // אפס מיקום ראשון לעשות פיינל אחד מיקום שני לעשות גם פיינל
-        if (theChoiceResult[0] == 1) {
+            theChoiceResult[LOCATION_ARRAY] = scanner.nextInt();
+        } while (theChoiceResult[LOCATION_ARRAY] != CHOICE_RESULT && theChoiceResult[LOCATION_ARRAY] != LOCATION_ARRAY2); // אפס מיקום ראשון לעשות פיינל אחד מיקום שני לעשות גם פיינל
+        if (theChoiceResult[LOCATION_ARRAY] == LOCATION_ARRAY2) {
             System.out.println("""
                     Are you a club member?
                     1 - Yes
                     2 - no""");
-            theChoiceResult[1] = scanner.nextInt();
+            theChoiceResult[LOCATION_ARRAY2] = scanner.nextInt();
         } else {
             do {
                 System.out.println("""
@@ -51,9 +82,9 @@ public class OnlineMarket {
                         1 - For a regular employee
                         2 - For a manager
                         3 - For a member of the management team""");
-                theChoiceResult[1] = scanner.nextInt();
+                theChoiceResult[LOCATION_ARRAY2] = scanner.nextInt();
             }
-            while (theChoiceResult[1] < 1 || theChoiceResult[1] > 3);
+            while (theChoiceResult[LOCATION_ARRAY2] < LOCATION_ARRAY2 || theChoiceResult[LOCATION_ARRAY2] > LAST_OPTION);
 
         }
         return theChoiceResult;
@@ -83,7 +114,7 @@ public class OnlineMarket {
     }
 
     private boolean passwordCheck(String password) {
-        if (password.length() >= 6) {
+        if (password.length() >= PASSWORD_LENGTH) {
             return true;
         }
         return false;
@@ -100,13 +131,13 @@ public class OnlineMarket {
                     2 - Employee account""");
             clientOrEmployee = scanner.nextInt();
         }
-        while (clientOrEmployee != 1 && clientOrEmployee != 2);
+        while (clientOrEmployee != CLIENT && clientOrEmployee != EMPLOYEE);
         System.out.println("Please enter a user name");
         String bug = scanner.nextLine();// אין לי מושג אבל זה פותר את התקלה
         String userName = scanner.nextLine();
         System.out.println("Type a password");
         String password = scanner.nextLine();
-        if (clientOrEmployee == 1) {
+        if (clientOrEmployee == CLIENT) {
             for (int i = 0; i < clients.length; i++) {
                 if (Objects.equals(clients[i].getUserName(), userName) && Objects.equals(clients[i].getPassword(), password)) {
                     System.out.println(clients[i]);
@@ -128,7 +159,7 @@ public class OnlineMarket {
 
     public void createUser() {
         Scanner scanner = new Scanner(System.in);
-        int items = 0;
+        int items = ITEMS;
         int[] typeOfUser = employeeOrCustomer();
         System.out.println("Please enter your first name:");
         String firstName = scanner.nextLine();
@@ -165,7 +196,7 @@ public class OnlineMarket {
         Date date = new Date();
         User user = new User(firstName, lastName, userName, password, items, date);
         addUserToArray(user);
-        if (typeOfUser[0] == 1) {
+        if (typeOfUser[ARRAY_SIZE] == CLIENT) {
             createEmployeeOrClient(user, typeOfUser);
         } else {
             createEmployeeOrClient(user, typeOfUser);
@@ -176,13 +207,13 @@ public class OnlineMarket {
 
     public void createEmployeeOrClient(User user, int[] typeUser) {
         int typeOfUser;
-        int numberOfPurchases = 0;
-        if (typeUser[0] == 1) {
-            typeOfUser = typeUser[1];
+        int numberOfPurchases = ITEMS;
+        if (typeUser[LOCATION_ARRAY] == CLIENT) {
+            typeOfUser = typeUser[LOCATION_ARRAY2];
             Client client = new Client(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser, user.getDate());
             addClientToArray(client);
         } else {
-            typeOfUser = typeUser[1];
+            typeOfUser = typeUser[LOCATION_ARRAY2];
             Employee employee = new Employee(user.getFirstName(), user.getLastName(), user.getUserName(), user.getPassword(), numberOfPurchases, typeOfUser, user.getDate());
             addEmployeeArray(employee);
         }
@@ -236,30 +267,31 @@ public class OnlineMarket {
         if (inventory != null) {
             return;
         }
-        products[0] = new Product(1, "Whiskey", 120, 10, 5);
-        products[1] = new Product(2, "Arak", 65, 15, 20);
-        products[2] = new Product(3, "Vodka", 110, 5, 8);
-        products[3] = new Product(4, "wine", 140, 20, 20);
-        products[4] = new Product(5, "beer", 18, 10, 60);
+        products[BARCODE] = new Product(BARCODE1, "Whiskey", PRICE_WHISKEY, DISCOUNT_WISKEY_BEER, AMOUNT_WHISKEY_VODKA_BEER);
+        products[BARCODE1] = new Product(BARCODE2, "Arak", ARAK_PRICE, DISCOUNT_ARAK_VODKA, AMOUNT_ARAK_WINE);
+        products[BARCODE2] = new Product(BARCODE3, "Vodka", VODKA_PRICE, DISCOUNT_ARAK_VODKA, AMOUNT_WHISKEY_VODKA_BEER);
+        products[BARCODE3] = new Product(BARCODE4, "wine", WINE_PRICE, DISCOUNT_WINE, AMOUNT_ARAK_WINE);
+        products[BARCODE4] = new Product(BARCODE5, "beer", BEER_PRICE, DISCOUNT_WISKEY_BEER, AMOUNT_WHISKEY_VODKA_BEER);
         inventory = new Inventory(products);
 
 
     }
 
+
     public void clientBuy() {
-        int typeOfProduct = 0;
-        int items = 0;
+        int typeOfProduct = ITEMS;
+        int items = ITEMS;
         shoppingCart = new ShoppingCart(inventory, products);
-        Product[] customerCart = new Product[0];
+        Product[] customerCart = new Product[ARRAY_SIZE];
         Scanner scanner = new Scanner(System.in);
         listOfProducts();
-        while (typeOfProduct != -1) {
+        while (typeOfProduct != FINISH_SHOP) {
             inventory = new Inventory(products);
             System.out.print(inventory);
             System.out.println(" Which product would you like to buy? choose by barcode \n" +
                     "If you want to finish the purchase in the store, type -1 ");
             typeOfProduct = scanner.nextInt();
-            while (items <= 0 && typeOfProduct != -1) {
+            while (items <= ITEMS && typeOfProduct != FINISH_SHOP) {
                 System.out.println("Quantity of items requested?");
                 items = scanner.nextInt();
             }
@@ -270,11 +302,11 @@ public class OnlineMarket {
                     shoppingCart.setAvailableInventory(inventory);
                     customerCart = addProductToArray(products[i], customerCart);
                     customerCart[customerCart.length - 1].setNumberOfProduct(items);
-                    items = 0;
+                    items = ITEMS;
                     System.out.println("Products in the current cart: \n" + customerCart[customerCart.length - 1].getProductDescription() + "--" + customerCart[customerCart.length - 1].getNumberOfProduct());
                     System.out.println("The current cart price is: " + resultOfTotalPrice(customerCart) + "₪");
-                    if (products[i].getNumberOfProduct() < 0) {
-                        products[i].setNumberOfProduct(0);
+                    if (products[i].getNumberOfProduct() < ITEMS) {
+                        products[i].setNumberOfProduct(ITEMS);
                         System.out.println("Unfortunately the product is out of stock");
                         break;
                     }
@@ -300,7 +332,10 @@ public class OnlineMarket {
         System.out.println("List of all customers in the store");
         for (int i = 0; i < clients.length; i++) {
             System.out.println(clients[i]);
-
+            if (clients == null) {
+                System.out.println("No customers exist");
+                return;
+            }
         }
     }
 
@@ -328,7 +363,7 @@ public class OnlineMarket {
             return;
         }
         for (int i = 0; i < clients.length; i++) {
-            if (clients[i].getNumberOfPurchases() >= 1) {
+            if (clients[i].getNumberOfPurchases() >= CLIENT) {
                 System.out.println("Customers who have made one or more purchases:\n" + clients[i]);
             }
         }
@@ -340,7 +375,7 @@ public class OnlineMarket {
             System.out.println("No customers exist");
             return;
         }
-        Client preferredCustomer = clients[0];
+        Client preferredCustomer = clients[ARRAY_SIZE];
         for (int i = 0; i < clients.length; i++) {
             if (preferredCustomer.getNumberOfPurchases() < clients[i].getNumberOfPurchases()) {
                 preferredCustomer = clients[i];
@@ -391,42 +426,40 @@ public class OnlineMarket {
 
     }
 
+
     public void employeeBuy() {
         double priceForEmployee = 0;
         double discountPercentage;
-        int typeOfEmployee = 0;
+        int typeOfEmployee = START_TYPE_EMPLOYEE;
         System.out.println("Hello dear employee Welcome to the online store");
         clientBuy();
         Product[] shoppingCartForEmployee = shoppingCart.getAvailableProduct();
         priceForEmployee = resultOfTotalPrice(shoppingCartForEmployee);
 
-        for (int i = 0; i < employees.length ; i++) {
-            for (int j = 0; j < employees.length; j++) {
-                if (this.employees[i].getDate().after(employees[j].getDate())) {
-                    typeOfEmployee = employees[i].getTypeOfEmployee();
-                    break;
-                }
-
-            }
+        for (int i = 0; i < employees.length; ) {
+            //  for (int j = 0; j < employees.length; j++) {
+            //  if (this.employees[i].getDate().after(employees[j].getDate())) {
+            typeOfEmployee = employees[i].getTypeOfEmployee();
+            break;
         }
+
+
         switch (typeOfEmployee) {
-            case 1 -> {
-                discountPercentage = 10;
-                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100)); // לחפש משהו יותר יעיל לאחוזים
+            case REGULAR_EMPLOYEE -> {
+                priceForEmployee = priceForEmployee - (priceForEmployee * REGULAR_EMPLOYEE_DISCOUNT); // לחפש משהו יותר יעיל לאחוזים
             }
-            case 2 -> {
-                discountPercentage = 20;
-                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
+            case MANAGER_EMPLOYEE -> {
+                priceForEmployee = priceForEmployee - (priceForEmployee * MANAGER_EMPLOYEE_DISCOUNT);
             }
-            case 3 -> {
-                discountPercentage = 30;
-                priceForEmployee = priceForEmployee - (priceForEmployee * (discountPercentage / 100));
+            case MEMBER_EMPLOYEE -> {
+                priceForEmployee = priceForEmployee - (priceForEmployee * MEMBER_EMPLOYEE_DISCOUNT);
             }
         }
         System.out.println("Price after discount: " + priceForEmployee + "₪");
 
 
     }
+
 
 }
 

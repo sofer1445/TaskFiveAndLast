@@ -133,7 +133,7 @@ public class OnlineMarket {
         }
         while (clientOrEmployee != CLIENT && clientOrEmployee != EMPLOYEE);
         System.out.println("Please enter a user name");
-        String bug = scanner.nextLine();// אין לי מושג אבל זה פותר את התקלה
+        String bug = scanner.nextLine();
         String userName = scanner.nextLine();
         System.out.println("Type a password");
         String password = scanner.nextLine();
@@ -382,7 +382,7 @@ public class OnlineMarket {
             }
         }
         System.out.println("The customer with the highest number of purchases is: " + preferredCustomer);
-    } // נבדק רק פעמיים לנסות למצוא באגים...
+    }
 
     public int resultOfTotalPrice(Product[] products) {
         int totalPrice = 0;
@@ -428,8 +428,7 @@ public class OnlineMarket {
 
 
     public void employeeBuy() {
-        double priceForEmployee = 0;
-        double discountPercentage;
+        double priceForEmployee;
         int typeOfEmployee = START_TYPE_EMPLOYEE;
         System.out.println("Hello dear employee Welcome to the online store");
         clientBuy();
@@ -437,8 +436,6 @@ public class OnlineMarket {
         priceForEmployee = resultOfTotalPrice(shoppingCartForEmployee);
 
         for (int i = 0; i < employees.length; ) {
-            //  for (int j = 0; j < employees.length; j++) {
-            //  if (this.employees[i].getDate().after(employees[j].getDate())) {
             typeOfEmployee = employees[i].getTypeOfEmployee();
             break;
         }
